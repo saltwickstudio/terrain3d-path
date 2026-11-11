@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="TerrainPathStyle" format=3]
+
+[ext_resource type="Script" uid="uid://vbr1bbrnbpvl" path="res://addons/terrain_paths/terrain_path_style.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+default_width = 4.4
+surface_tag = "mud"
+base_color = Color(0.46, 0.33, 0.24, 1)
+wear_color = Color(0.55, 0.42, 0.3, 0.4)
+pattern_color = Color(0.33, 0.24, 0.17, 1)
+pattern_color_2 = Color(0.56, 0.47, 0.28, 1)
+rim_color = Color(0.36, 0.36, 0.22, 1)
+wear_width = 0.42
+rim_width = 0.09
+feather = 0.38
+edge_hardness = 0.5
+wobble = 0.22
+wobble_scale = 5.2
+ragged = 0.11
+pattern_scale = 1.05
+pattern_amount = 0.16
+mottle = 0.55
+bump_strength = 0.7

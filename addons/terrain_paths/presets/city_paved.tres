@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="TerrainPathStyle" format=3]
+
+[ext_resource type="Script" uid="uid://vbr1bbrnbpvl" path="res://addons/terrain_paths/terrain_path_style.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+pattern = 2
+default_width = 6.0
+surface_tag = "cobble"
+base_color = Color(0.66, 0.6, 0.52, 1)
+wear_color = Color(0.72, 0.66, 0.58, 0.2)
+pattern_color = Color(0.47, 0.42, 0.36, 1)
+pattern_color_2 = Color(0.6, 0.55, 0.48, 1)
+rim_color = Color(0.38655216, 0.39003336, 0.25171238, 1)
+rim_width = 0.0
+feather = 0.06
+edge_hardness = 0.0
+wobble = 0.5
+wobble_scale = 5.2
+ragged = 0.5
+pattern_scale = 0.65
+pattern_amount = 0.6
+mottle = 0.42
+bump_strength = 0.7
+edging = true
+edging_width = 0.3
+edging_block_length = 1.0
+edging_color = Color(0.52, 0.49, 0.45, 1)

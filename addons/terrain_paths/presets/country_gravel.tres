@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="TerrainPathStyle" format=3]
+
+[ext_resource type="Script" uid="uid://vbr1bbrnbpvl" path="res://addons/terrain_paths/terrain_path_style.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+pattern = 1
+default_width = 3.8
+surface_tag = "gravel"
+base_color = Color(0.66, 0.63, 0.57, 1)
+wear_color = Color(0.73, 0.7, 0.64, 0.35)
+pattern_color = Color(0.5, 0.48, 0.43, 1)
+pattern_color_2 = Color(0.78, 0.75, 0.69, 1)
+rim_color = Color(0.46, 0.5, 0.33, 1)
+wear_width = 0.33
+rim_width = 0.1
+feather = 0.42
+edge_hardness = 0.65
+wobble = 0.06
+wobble_scale = 2.8
+ragged = 0.09
+pattern_scale = 0.07
+pattern_amount = 0.24
+mottle = 0.4
+bump_strength = 0.9
