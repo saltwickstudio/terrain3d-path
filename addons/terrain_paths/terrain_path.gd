@@ -78,6 +78,14 @@ var _join_partners_new: Array = []
 var _partner_triggered := false
 var _seen_points := PackedVector3Array()
 var _seating := false
+# editor: last build's footprint + area flora still needs replanting
+var _foot := Rect2()
+var _flora_dirty := Rect2()
+var _flora_ticket := 0
+var _store_ticket := 0
+
+const FLORA_SETTLE := 0.35   # seconds of no edits before flora re-plants
+const STORE_SETTLE := 1.0
 static var _restack_queued := false
 # no Terrain3D in the scene? func(node) -> anything with get_height / get_normal
 # (and sample() -> {height, edge} to cut at its edges). unset = nothing
@@ -277,6 +285,46 @@ func _on_style_changed() -> void:
 	_queue_rebuild()
 
 
+func _world_footprint(flats: Array, radius: float) -> Rect2:
+	var out := Rect2()
+	var first := true
+	for f in flats:
+		var r: Rect2 = f.rect
+		for c in [r.position, r.position + Vector2(r.size.x, 0.0), r.end, r.position + Vector2(0.0, r.size.y)]:
+			var w := global_transform * Vector3(c.x, 0.0, c.y)
+			var p := Vector2(w.x, w.z)
+			out = Rect2(p, Vector2.ZERO) if first else out.expand(p)
+			first = false
+	return out.grow(radius + 1.0)
+
+
+func _poke_flora(ticket: int) -> void:
+	if ticket != _flora_ticket or not is_inside_tree():
+		return
+	var dirty := _flora_dirty
+	_flora_dirty = Rect2()
+	for z in get_tree().get_nodes_in_group(&"flora_zone"):
+		if not z.has_method(&"queue_rebuild"):
+			continue
+		var zr = _zone_rect(z)
+		if zr == null or (zr as Rect2).intersects(dirty, true):
+			z.queue_rebuild()
+
+
+## null if no outline
+static func _zone_rect(z: Node) -> Variant:
+	if not (z is Path3D) or (z as Path3D).curve == null or (z as Path3D).curve.point_count == 0:
+		return null
+	var c := (z as Path3D).curve
+	var xf := (z as Path3D).global_transform
+	var out := Rect2()
+	for i in c.point_count:
+		var w := xf * c.get_point_position(i)
+		var p := Vector2(w.x, w.z)
+		out = Rect2(p, Vector2.ZERO) if i == 0 else out.expand(p)
+	return out.grow(2.0)
+
+
 func _queue_rebuild() -> void:
 	if not is_inside_tree():
 		return
@@ -442,9 +490,19 @@ func _rebuild() -> void:
 	# editor only: nudge anything in "flora_zone" to re-plant round the new shape
 	# first build only pokes zones with paths_pending
 	if Engine.is_editor_hint() and is_inside_tree():
-		for z in get_tree().get_nodes_in_group(&"flora_zone"):
-			if z.has_method(&"queue_rebuild") and (was_built or z.get(&"paths_pending")):
-				z.queue_rebuild()
+		var old_foot := _foot
+		_foot = _world_footprint(flats, radius)
+		if not was_built:
+			for z in get_tree().get_nodes_in_group(&"flora_zone"):
+				if z.has_method(&"queue_rebuild") and z.get(&"paths_pending"):
+					z.queue_rebuild()
+		else:
+			# only zones under the old or new footprint, once the dragging stops
+			var dirty := _foot.merge(old_foot) if old_foot.has_area() else _foot
+			_flora_dirty = _flora_dirty.merge(dirty) if _flora_dirty.has_area() else dirty
+			_flora_ticket += 1
+			var ticket := _flora_ticket
+			get_tree().create_timer(FLORA_SETTLE).timeout.connect(func(): _poke_flora(ticket))
 	if flats.is_empty() or flats[0].src != curve:
 		_mi.mesh = null
 		return
@@ -509,7 +567,8 @@ func _rebuild() -> void:
 	_mat.set_shader_parameter("half_width", hw)
 	_set_runs(flat, closed, flats[0].len)
 	# grid is the slow bit, reuse a cached mesh at runtime
-	var cache_key := TerrainPathMeshCache.key(self, data) if TerrainPathMeshCache.active() else ""
+	var cache_key := TerrainPathMeshCache.key(self, data, flats, joins, Rect2(lo, hi - lo)) \
+			if TerrainPathMeshCache.active() else ""
 	var cached := TerrainPathMeshCache.fetch(self, cache_key)
 	if cached != null:
 		_refresh_partners()
@@ -730,7 +789,15 @@ func _rebuild() -> void:
 			(Mesh.ARRAY_CUSTOM_RGBA_FLOAT << Mesh.ARRAY_FORMAT_CUSTOM0_SHIFT)
 			| (Mesh.ARRAY_CUSTOM_RGBA_FLOAT << Mesh.ARRAY_FORMAT_CUSTOM1_SHIFT))
 	_refresh_partners()
-	TerrainPathMeshCache.store(self, cache_key, mesh)
+	if Engine.is_editor_hint():
+		# editor: wait for dragging to stop
+		_store_ticket += 1
+		var ticket := _store_ticket
+		get_tree().create_timer(STORE_SETTLE).timeout.connect(func():
+			if ticket == _store_ticket and is_inside_tree():
+				TerrainPathMeshCache.store(self, cache_key, mesh))
+	else:
+		TerrainPathMeshCache.store(self, cache_key, mesh)
 	mesh.surface_set_material(0, _mat)
 	_mi.mesh = mesh
 

@@ -78,7 +78,29 @@ static func bake_all(root: Node) -> void:
 			push_warning("[PathBake] couldn't cache %s (error %d)" % [file, err])
 	if not rig.is_empty():
 		(rig.root as Node).queue_free()
-	print("[PathBake] %d cached, %d baked (%s) in %d ms" % [hits, baked, dir, Time.get_ticks_msec() - t0])
+	var pruned := _prune(root, paths, dir)
+	print("[PathBake] %d cached, %d baked, %d stale removed (%s) in %d ms" % [hits, baked, pruned, dir, Time.get_ticks_msec() - t0])
+
+
+## editor only - delete bakes / mesh caches in the level folder nothing points at any more
+## skipped when the level is instanced in another scene
+static func _prune(root: Node, paths: Array, dir: String) -> int:
+	if not OS.has_feature("editor") or not dir.begins_with("res://") \
+			or root != root.get_tree().current_scene or OS.has_environment("NO_PATH_BAKE_PRUNE"):
+		return 0
+	var keep := {}
+	for p in paths:
+		if not is_instance_valid(p):
+			continue
+		var tp := p as TerrainPath
+		keep["%s_%08x.res" % [String(tp.name).to_snake_case(), hash(str(root.get_path_to(tp))) & 0xffffffff]] = true
+		if TerrainPathMeshCache._root(tp) == root:
+			keep[TerrainPathMeshCache._stem(tp, root)] = true
+	var n := 0
+	for f in DirAccess.get_files_at(dir):
+		if f.ends_with(".res") and not keep.has(f) and DirAccess.remove_absolute(dir.path_join(f)) == OK:
+			n += 1
+	return n
 
 
 ## write dir - next to the scene in editor runs, user:// in exports. reads try _shipped_dir first
