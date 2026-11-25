@@ -29,7 +29,7 @@ Paint paths and roads onto [Terrain3D](https://github.com/TokisanGames/Terrain3D
 
 ## Requirements
 
-- Godot 4.6 or later (tested on 4.6 and 4.8)
+- Godot 4.7 or later (tested on 4.7.2 and the 4.8 betas). Not 4.6, Terrain3D 1.1 crashes the 4.6 editor on macOS
 - Terrain3D 1.1. Without a Terrain3D in the scene paths just follow the curve's own height
 
 ## Install
