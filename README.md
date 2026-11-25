@@ -76,7 +76,7 @@ Paint paths and roads onto [Terrain3D](https://github.com/TokisanGames/Terrain3D
 
 ## Notes
 
-- Paths are visual only, there's no collision
+- Paths are painted over the terrain, so things walk on them using Terrain3D's own collision. `PathScatter` stones have no collision of their own
 - The first time you run a scene, its paths save their finished look into a `path_bake` folder next to it, so they load faster after that. Leave it in your project. If a path ever looks out of date, delete the folder and it rebuilds
 - Each style has a **Surface Tag** (`mud`, `gravel`, `cobble`, `paving`, `road`). The addon doesn't use it, it's for your game, e.g. footstep sounds:
   ```gdscript
