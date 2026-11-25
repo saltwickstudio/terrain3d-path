@@ -29,7 +29,7 @@ Paint paths and roads onto [Terrain3D](https://github.com/TokisanGames/Terrain3D
 
 ## Requirements
 
-- Godot 4.8 (it's what I build on, earlier 4.x may work but I haven't tested it)
+- Godot 4.6 or later (tested on 4.6 and 4.8)
 - Terrain3D 1.1. Without a Terrain3D in the scene paths just follow the curve's own height
 
 ## Install
@@ -93,9 +93,10 @@ Paint paths and roads onto [Terrain3D](https://github.com/TokisanGames/Terrain3D
   	# tag is "" off a path. anything not in step_sounds falls back to play_grass_step
   	step_sounds.get(tag, play_grass_step).call()
   ```
-- Two optional hooks if your game needs them:
+- Three optional hooks if your game needs them:
   - `TerrainPath.ground_fallback`: a `func(node) -> Object` with `get_height()` / `get_normal()` for scenes with no Terrain3D
   - `PathScatter.mesh_hook`: a `func(mesh_instance)` run on every stone mesh, e.g. to swap in your own shader
+  - `TerrainPath.reshaped_hook`: editor only, a `func(path, area, first_build)` called when a path is built or edited. `area` is the world XZ `Rect2` it covered, handy for re-planting grass or trees round it
 
 ## Credits
 

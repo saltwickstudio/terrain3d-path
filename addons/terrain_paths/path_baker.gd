@@ -79,7 +79,7 @@ static func bake_all(root: Node) -> void:
 	if not rig.is_empty():
 		(rig.root as Node).queue_free()
 	var pruned := _prune(root, paths, dir)
-	print("[PathBake] %d cached, %d baked, %d stale removed (%s) in %d ms" % [hits, baked, pruned, dir, Time.get_ticks_msec() - t0])
+	print_verbose("[PathBake] %d cached, %d baked, %d stale removed (%s) in %d ms" % [hits, baked, pruned, dir, Time.get_ticks_msec() - t0])
 
 
 ## editor only - delete bakes / mesh caches in the level folder nothing points at any more

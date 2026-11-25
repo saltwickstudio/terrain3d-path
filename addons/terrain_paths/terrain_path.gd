@@ -78,18 +78,21 @@ var _join_partners_new: Array = []
 var _partner_triggered := false
 var _seen_points := PackedVector3Array()
 var _seating := false
-# editor: last build's footprint + area flora still needs replanting
+# editor: last build's footprint + area still to report to reshaped_hook
 var _foot := Rect2()
-var _flora_dirty := Rect2()
-var _flora_ticket := 0
+var _dirty := Rect2()
+var _dirty_ticket := 0
 var _store_ticket := 0
 
-const FLORA_SETTLE := 0.35   # seconds of no edits before flora re-plants
+const RESHAPE_SETTLE := 0.35   # seconds of no edits before reshaped_hook fires
 const STORE_SETTLE := 1.0
 static var _restack_queued := false
 # no Terrain3D in the scene? func(node) -> anything with get_height / get_normal
 # (and sample() -> {height, edge} to cut at its edges). unset = nothing
 static var ground_fallback: Callable
+# editor only, func(path, area: Rect2, first_build: bool) - area is world xz
+# first build fires straight away, edits after RESHAPE_SETTLE of quiet. unset = nothing
+static var reshaped_hook: Callable
 
 
 func _ready() -> void:
@@ -298,31 +301,13 @@ func _world_footprint(flats: Array, radius: float) -> Rect2:
 	return out.grow(radius + 1.0)
 
 
-func _poke_flora(ticket: int) -> void:
-	if ticket != _flora_ticket or not is_inside_tree():
+func _report_reshape(ticket: int) -> void:
+	if ticket != _dirty_ticket or not is_inside_tree():
 		return
-	var dirty := _flora_dirty
-	_flora_dirty = Rect2()
-	for z in get_tree().get_nodes_in_group(&"flora_zone"):
-		if not z.has_method(&"queue_rebuild"):
-			continue
-		var zr = _zone_rect(z)
-		if zr == null or (zr as Rect2).intersects(dirty, true):
-			z.queue_rebuild()
-
-
-## null if no outline
-static func _zone_rect(z: Node) -> Variant:
-	if not (z is Path3D) or (z as Path3D).curve == null or (z as Path3D).curve.point_count == 0:
-		return null
-	var c := (z as Path3D).curve
-	var xf := (z as Path3D).global_transform
-	var out := Rect2()
-	for i in c.point_count:
-		var w := xf * c.get_point_position(i)
-		var p := Vector2(w.x, w.z)
-		out = Rect2(p, Vector2.ZERO) if i == 0 else out.expand(p)
-	return out.grow(2.0)
+	var dirty := _dirty
+	_dirty = Rect2()
+	if reshaped_hook.is_valid():
+		reshaped_hook.call(self, dirty, false)
 
 
 func _queue_rebuild() -> void:
@@ -487,22 +472,20 @@ func _rebuild() -> void:
 				rect = Rect2(bp, Vector2.ZERO) if bi == 0 else rect.expand(bp)
 			flats.append({flat = fc3, len = fl, closed = c3.closed, src = c3, node = src_nodes[si], fade = fade, rect = rect})
 	_flats = flats
-	# editor only: nudge anything in "flora_zone" to re-plant round the new shape
-	# first build only pokes zones with paths_pending
+	# editor only: tell reshaped_hook what area changed
 	if Engine.is_editor_hint() and is_inside_tree():
 		var old_foot := _foot
 		_foot = _world_footprint(flats, radius)
 		if not was_built:
-			for z in get_tree().get_nodes_in_group(&"flora_zone"):
-				if z.has_method(&"queue_rebuild") and z.get(&"paths_pending"):
-					z.queue_rebuild()
+			if reshaped_hook.is_valid():
+				reshaped_hook.call(self, _foot, true)
 		else:
-			# only zones under the old or new footprint, once the dragging stops
+			# old + new footprint, once the dragging stops
 			var dirty := _foot.merge(old_foot) if old_foot.has_area() else _foot
-			_flora_dirty = _flora_dirty.merge(dirty) if _flora_dirty.has_area() else dirty
-			_flora_ticket += 1
-			var ticket := _flora_ticket
-			get_tree().create_timer(FLORA_SETTLE).timeout.connect(func(): _poke_flora(ticket))
+			_dirty = _dirty.merge(dirty) if _dirty.has_area() else dirty
+			_dirty_ticket += 1
+			var ticket := _dirty_ticket
+			get_tree().create_timer(RESHAPE_SETTLE).timeout.connect(func(): _report_reshape(ticket))
 	if flats.is_empty() or flats[0].src != curve:
 		_mi.mesh = null
 		return
@@ -885,7 +868,7 @@ static func _point_seg_dist(p: Vector2, a: Vector2, b: Vector2) -> float:
 	return p.distance_to(a + ab * clampf((p - a).dot(ab) / l2, 0.0, 1.0))
 
 
-## per flat [start, end], each null or {p, n, partner}: joint midpoint + outward mitre normal.
+## per flat [start, end], each null or {p, n, partner}: joint midpoint + outward mitre normal
 ## both paths get the same plane so they butt without a seam
 func _end_joins(flats: Array) -> Array:
 	var out: Array = []
