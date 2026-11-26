@@ -2,6 +2,8 @@
 
 Paint paths and roads onto [Terrain3D](https://github.com/TokisanGames/Terrain3D) in Godot 4. Draw a curve, pick a style, and it follows the terrain and blends at the edges.
 
+![Adding a path, a crossroads, and swapping between styles in the editor](docs/demo.gif)
+
 | | | | |
 |---|---|---|---|
 | ![Woodland mud](docs/woodland.png) | ![Country gravel](docs/gravel.png) | ![City paving](docs/city_paving.png) | ![City slabs](docs/city_slabs.png) |
@@ -38,6 +40,18 @@ Paint paths and roads onto [Terrain3D](https://github.com/TokisanGames/Terrain3D
 2. Copy `addons/terrain_paths` into your project's `addons` folder
 3. **Project → Project Settings → Plugins** and tick **Terrain3D Path**. The path nodes work without it, the plugin only adds the snap button
 
+## Example project
+
+The repo is also a small Godot project, one scene with a branch, a crossroads, mud fading into cobbles and a path of 3D stones.
+
+![Example scene](docs/example.png)
+
+1. Clone or download this repo (the Asset Library zip is just the addon)
+2. Grab Terrain3D 1.1 from its [releases](https://github.com/TokisanGames/Terrain3D/releases) and copy its `addons/terrain_3d` folder into this repo's `addons`. Do this before opening it, the paths need Terrain3D to load
+3. Open `project.godot` in Godot 4.7 or later and press play, or open `example/example.tscn`
+
+The terrain was made by `example/gen_terrain.gd` if you want a starting point for your own.
+
 ## Step by step
 
 **1. Add a path**
@@ -55,6 +69,7 @@ Paint paths and roads onto [Terrain3D](https://github.com/TokisanGames/Terrain3D
 
 - **Width** on the node, 0 uses the style's default
 - Everything else lives in **Style**: colours, pattern, edges, wear, bump, edging, road markings and the end style
+- Changing **Pattern** keeps the old colours. Press **Reset To Pattern Defaults** under it to load that pattern's preset look
 - Each new path gets its own copy of its style, so changing one doesn't touch the others. To reuse a look, save the style as a `.tres` and load it on the other paths
 
 **4. Branches and crossroads**
@@ -101,6 +116,8 @@ Paint paths and roads onto [Terrain3D](https://github.com/TokisanGames/Terrain3D
 ## Credits
 
 Built on [Terrain3D](https://github.com/TokisanGames/Terrain3D) by Cory Petkovsek and Roope Palmroos.
+
+Icon: [winding road](https://thenounproject.com/icon/winding-road-6426534/) by Capativ Design from Noun Project (CC BY 3.0).
 
 ## License
 

@@ -1,0 +1,276 @@
+[gd_scene format=3 uid="uid://cxagxky5bo51b"]
+
+[ext_resource type="Terrain3DAssets" uid="uid://caqe3s6ltt6ab" path="res://example/example_assets.tres" id="1_ujzde"]
+[ext_resource type="Script" uid="uid://dforprr54dpi2" path="res://addons/terrain_paths/gravel_path.gd" id="2_ykvhj"]
+[ext_resource type="Script" uid="uid://vbr1bbrnbpvl" path="res://addons/terrain_paths/terrain_path_style.gd" id="3_1rqa4"]
+[ext_resource type="Script" uid="uid://kmoden8v2pqh" path="res://addons/terrain_paths/terrain_path.gd" id="4_xm42s"]
+[ext_resource type="Script" uid="uid://cxd8r7a0maiqe" path="res://addons/terrain_paths/road_path.gd" id="5_tdg64"]
+[ext_resource type="Script" uid="uid://bqv43wb1reucb" path="res://addons/terrain_paths/cobble_path.gd" id="6_nk31j"]
+[ext_resource type="Texture2D" uid="uid://bo18y30hxjnn0" path="res://addons/terrain_paths/textures/cobbles_toon.png" id="7_fy1p0"]
+[ext_resource type="Script" uid="uid://bbwc1qsn27b7m" path="res://addons/terrain_paths/woodland_path.gd" id="8_svvho"]
+[ext_resource type="Script" uid="uid://dcglitkomer6b" path="res://addons/terrain_paths/stone_path.gd" id="9_x31ta"]
+[ext_resource type="Script" uid="uid://lx0s7r4p6gad" path="res://addons/terrain_paths/path_scatter.gd" id="10_d1m6b"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ntg8m"]
+sky_top_color = Color(0.36, 0.56, 0.85, 1)
+sky_horizon_color = Color(0.72, 0.8, 0.9, 1)
+ground_bottom_color = Color(0.72, 0.8, 0.9, 1)
+ground_horizon_color = Color(0.72, 0.8, 0.9, 1)
+
+[sub_resource type="Sky" id="Sky_8a8t6"]
+sky_material = SubResource("ProceduralSkyMaterial_ntg8m")
+
+[sub_resource type="Environment" id="Environment_ufiwg"]
+background_mode = 2
+sky = SubResource("Sky_8a8t6")
+ambient_light_source = 2
+ambient_light_color = Color(0.75, 0.8, 0.9, 1)
+ambient_light_energy = 0.5
+tonemap_mode = 4
+
+[sub_resource type="Terrain3DMaterial" id="Terrain3DMaterial_n4gct"]
+_shader_parameters = {
+&"bias_distance": null,
+&"blend_sharpness": null,
+&"depth_blur": null,
+&"distant_normal_scale": null,
+&"flat_terrain_normals": null,
+&"general_uniforms": null,
+&"mipmap_bias": null,
+&"mipmaps": null,
+&"private": null
+}
+world_background = 0
+
+[sub_resource type="Curve3D" id="Curve3D_5fqmh"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -34, 1.4604492, 22, 0, 0, 0, 0, 0, 0, -24, 1.3639151, 12, 0, 0, 0, 0, 0, 0, -14, 1.2000655, 8, 0, 0, 0, 0, 0, 0, -4, 1.5685, 10),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
+
+[sub_resource type="Resource" id="Resource_jkrui"]
+script = ExtResource("3_1rqa4")
+pattern = 1
+default_width = 3.8
+surface_tag = "gravel"
+base_color = Color(0.66, 0.63, 0.57, 1)
+wear_color = Color(0.73, 0.7, 0.64, 0.35)
+pattern_color = Color(0.5, 0.48, 0.43, 1)
+pattern_color_2 = Color(0.78, 0.75, 0.69, 1)
+rim_color = Color(0.46, 0.5, 0.33, 1)
+wear_width = 0.33
+rim_width = 0.1
+feather = 0.42
+edge_hardness = 0.65
+wobble = 0.06
+wobble_scale = 2.8
+ragged = 0.09
+pattern_scale = 0.07
+pattern_amount = 0.24
+mottle = 0.4
+bump_strength = 0.9
+
+[sub_resource type="Curve3D" id="Curve3D_jcr8w"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -24, 1.3639151, 12, 0, 0, 0, 0, 0, 0, -30, 2.858425, 4, 0, 0, 0, 0, 0, 0, -32, 3.0387983, -6),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[sub_resource type="Curve3D" id="Curve3D_bfoyt"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -6, 1.1876652, -24, 0, 0, 0, 0, 0, 0, 6, 2.347697, -24, 0, 0, 0, 0, 0, 0, 22, 5.658934, -24, 0, 0, 0, 0, 0, 0, 34, 7.2172236, -22),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
+
+[sub_resource type="Resource" id="Resource_1cem6"]
+script = ExtResource("3_1rqa4")
+pattern = 3
+default_width = 11.3
+surface_tag = "road"
+base_color = Color(0.3, 0.31, 0.33, 1)
+wear_color = Color(0.36, 0.37, 0.39, 0)
+pattern_color = Color(0.22, 0.23, 0.25, 1)
+pattern_color_2 = Color(0.45, 0.45, 0.46, 1)
+rim_color = Color(0.42, 0.38, 0.3, 1)
+rim_width = 0.179
+feather = 0.332
+edge_hardness = 0.9
+wobble = 0.03
+wobble_scale = 6.0
+ragged = 0.0
+pattern_scale = 1.0
+pattern_amount = 0.174
+mottle = 0.3
+bump_strength = 0.064
+edging_width = 0.84
+edging_block_length = 3.0
+markings = true
+line_width = 0.38
+dash_length = 1.6
+dash_gap = 3.2
+edge_line_inset = 1.55
+junction_radius = 3.0
+
+[sub_resource type="Curve3D" id="Curve3D_vh8kn"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 14, 6.7424374, -38, 0, 0, 0, 0, 0, 0, 14, 3.651258, -24, 0, 0, 0, 0, 0, 0, 14, 2.4368782, -10),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[sub_resource type="Curve3D" id="Curve3D_7nm0m"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 4, 1.3416914, 6, 0, 0, 0, 0, 0, 0, 14, 2.032322, 4, 0, 0, 0, 0, 0, 0, 24, 3.2569423, 6),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[sub_resource type="Resource" id="Resource_ovkd0"]
+script = ExtResource("3_1rqa4")
+pattern = 4
+default_width = 3.2
+surface_tag = "cobble"
+wear_color = Color(0.68, 0.65, 0.61, 0)
+rim_color = Color(0.38655216, 0.39003336, 0.25171238, 1)
+rim_width = 0.0
+feather = 0.05
+edge_hardness = 0.3
+wobble = 0.12
+ragged = 0.15
+pattern_scale = 0.5
+mottle = 0.25
+surface_texture = ExtResource("7_fy1p0")
+texture_tile = 3.0
+bump_strength = 0.35
+
+[sub_resource type="Curve3D" id="Curve3D_5rpji"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 36, 3.328247, 16, 0, 0, 0, 0, 0, 0, 30, 3.4531298, 8, 0, 0, 0, 0, 0, 0, 21, 3.083565, 5.5),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[sub_resource type="Resource" id="Resource_cfvs2"]
+script = ExtResource("3_1rqa4")
+default_width = 4.4
+surface_tag = "mud"
+base_color = Color(0.46, 0.33, 0.24, 1)
+wear_color = Color(0.55, 0.42, 0.3, 0.4)
+pattern_color = Color(0.33, 0.24, 0.17, 1)
+pattern_color_2 = Color(0.56, 0.47, 0.28, 1)
+rim_color = Color(0.36, 0.36, 0.22, 1)
+wear_width = 0.42
+rim_width = 0.09
+feather = 0.38
+edge_hardness = 0.5
+wobble_scale = 5.2
+ragged = 0.11
+pattern_scale = 1.05
+pattern_amount = 0.16
+mottle = 0.55
+bump_strength = 0.7
+end_style = 2
+
+[sub_resource type="Curve3D" id="Curve3D_5qies"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -10, 1.0392573, 30, 0, 0, 0, 0, 0, 0, 0, 1.8994342, 26, 0, 0, 0, 0, 0, 0, 10, 3.5312274, 30, 0, 0, 0, 0, 0, 0, 18, 4.279712, 24),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
+
+[sub_resource type="Resource" id="Resource_f5pa1"]
+script = ExtResource("3_1rqa4")
+pattern = 5
+default_width = 3.0
+surface_tag = "cobble"
+base_color = Color(0.47, 0.45, 0.42, 1)
+wear_color = Color(0.72, 0.73, 0.75, 0)
+pattern_color = Color(0.3, 0.28, 0.25, 1)
+pattern_color_2 = Color(0.43, 0.41, 0.38, 1)
+rim_width = 0.0
+feather = 0.05
+wobble = 0.1
+ragged = 0.15
+pattern_scale = 0.7
+pattern_amount = 1.0
+mottle = 0.0
+stone_gap = 0.1
+stone_roundness = 0.55
+stone_height = 0.05
+stone_bevel = 0.06
+stone_roughness = 0.4
+stone_shadow = 0.3
+bump_strength = 0.0
+
+[node name="Example" type="Node3D" unique_id=1114539733]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1273665129]
+environment = SubResource("Environment_ufiwg")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=454031942]
+transform = Transform3D(0.8660254, -0.35355338, 0.35355338, 0, 0.70710677, 0.70710677, -0.5, -0.61237246, 0.61237246, 0, 20, 0)
+shadow_enabled = true
+
+[node name="Terrain3D" type="Terrain3D" parent="." unique_id=1500296929]
+data_directory = "res://example/terrain_data"
+material = SubResource("Terrain3DMaterial_n4gct")
+assets = ExtResource("1_ujzde")
+vertex_spacing = 0.5
+displacement_sharpness = 0.5
+top_level = true
+metadata/_edit_lock_ = true
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=90936753]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 40, 42)
+current = true
+
+[node name="GravelTrack" type="Path3D" parent="." unique_id=110462627]
+curve = SubResource("Curve3D_5fqmh")
+script = ExtResource("2_ykvhj")
+style = SubResource("Resource_jkrui")
+segment_length = 0.3
+lift = 0.0
+
+[node name="Spur" type="Path3D" parent="GravelTrack" unique_id=1125295302]
+curve = SubResource("Curve3D_jcr8w")
+script = ExtResource("4_xm42s")
+
+[node name="Road" type="Path3D" parent="." unique_id=1696578989]
+curve = SubResource("Curve3D_bfoyt")
+script = ExtResource("5_tdg64")
+style = SubResource("Resource_1cem6")
+segment_length = 0.8
+lift = 0.0
+
+[node name="CrossRoad" type="Path3D" parent="Road" unique_id=860744129]
+curve = SubResource("Curve3D_vh8kn")
+script = ExtResource("4_xm42s")
+
+[node name="Cobbles" type="Path3D" parent="." unique_id=2122121921]
+curve = SubResource("Curve3D_7nm0m")
+script = ExtResource("6_nk31j")
+style = SubResource("Resource_ovkd0")
+segment_length = 1.05
+lift = 0.0
+
+[node name="MudFadingIn" type="Path3D" parent="." unique_id=1376181215]
+curve = SubResource("Curve3D_5rpji")
+script = ExtResource("8_svvho")
+style = SubResource("Resource_cfvs2")
+segment_length = 0.85
+lift = 0.0
+draw_order = 1
+
+[node name="SteppingStones" type="Path3D" parent="." unique_id=1068886]
+curve = SubResource("Curve3D_5qies")
+script = ExtResource("9_x31ta")
+style = SubResource("Resource_f5pa1")
+segment_length = 1.05
+lift = 0.0
+paint = false
+
+[node name="PathScatter" type="Node3D" parent="SteppingStones" unique_id=99688367]
+script = ExtResource("10_d1m6b")

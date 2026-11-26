@@ -3,7 +3,7 @@
 class_name TerrainPath
 extends Path3D
 ## paints a path/road onto Terrain3D along this curve, look comes from `style` (presets/ has a few)
-## visual only, no collision
+## painted over the terrain, so collision is Terrain3D's own
 ##
 ## child TerrainPaths become branches, baked into the parent's mesh with the parent's style/width
 

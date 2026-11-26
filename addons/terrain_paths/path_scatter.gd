@@ -2,10 +2,10 @@
 class_name PathScatter
 extends Node3D
 ## lays stones along its parent TerrainPath, add as a child of one
-## no tile scenes = it makes its own (see Made Stones), or assign tile scenes like KayKit Halloween path_A..D (2 m grid)
+## no tile scenes = it makes its own (see Made Stones), or give it your own path tile scenes (2 m grid)
 ## tiles go on a grid in path space, get split into single stones and each one is seated on the terrain separately
 ## so the edge is cut stone by stone
-## tile bends: clashing stones skipped, gaps filled with the C / D tiles where they fit
+## tile bends: clashing stones skipped, gaps filled from edge_pieces then stray_pieces where they fit
 ## one ArrayMesh per chunk, transient, no collision
 
 const MESH_PREFIX := "_Scatter"
@@ -283,7 +283,7 @@ func _rebuild() -> void:
 				set_name = "edge"
 			_lay_tile(ctx, _pick(rng, _tiles[set_name]), u, w, _turns(rng), hw * fill, rng)
 
-	# bends, C then D, only stones that land in a gap
+	# bends, edge then stray, only stones that land in a gap
 	for set_name in ["edge", "stray"]:
 		if made or _tiles[set_name].is_empty():   # made stones close bends themselves
 			continue

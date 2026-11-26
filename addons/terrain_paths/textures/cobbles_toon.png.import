@@ -3,19 +3,20 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bo18y30hxjnn0"
-path="res://.godot/imported/cobbles_toon.png-4d7e5f31cf2b9e3b24530dbd2ba961e2.ctex"
+path.s3tc="res://.godot/imported/cobbles_toon.png-4d7e5f31cf2b9e3b24530dbd2ba961e2.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://addons/terrain_paths/textures/cobbles_toon.png"
-dest_files=["res://.godot/imported/cobbles_toon.png-4d7e5f31cf2b9e3b24530dbd2ba961e2.ctex"]
+dest_files=["res://.godot/imported/cobbles_toon.png-4d7e5f31cf2b9e3b24530dbd2ba961e2.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/high_quality_mode=0
 compress/lossy_quality=0.7
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

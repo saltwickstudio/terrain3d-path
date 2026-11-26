@@ -1,2 +1,5 @@
 .godot/
 .DS_Store
+# install Terrain3D into the example yourself, see README
+addons/terrain_3d/
+example/path_bake/

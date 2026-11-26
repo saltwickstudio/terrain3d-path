@@ -4,3 +4,6 @@
 /.gitignore export-ignore
 /CONTRIBUTING.md export-ignore
 /docs export-ignore
+/project.godot export-ignore
+/example export-ignore
+/icon.png export-ignore

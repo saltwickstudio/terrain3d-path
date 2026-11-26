@@ -12,6 +12,8 @@ enum EndStyle { ROUND, SQUARE, FEATHERED }
 	set(v):
 		pattern = v
 		emit_changed()
+## swapping pattern keeps the old colours, this loads the matching preset's look instead
+@export_tool_button("Reset To Pattern Defaults", "Reload") var reset_look := reset_to_pattern_defaults
 ## metres, a path can override
 @export var default_width := 2.0:
 	set(v):
@@ -300,6 +302,24 @@ func apply_to(mat: ShaderMaterial) -> void:
 
 
 const PRESET_DIR := "res://addons/terrain_paths/presets/"
+const PATTERN_PRESETS := {
+	Pattern.MUD: "woodland_mud",
+	Pattern.GRAVEL: "country_gravel",
+	Pattern.PAVED: "city_paved",
+	Pattern.ROAD: "road",
+	Pattern.TEXTURE: "cobbles",
+	Pattern.STONES: "stones",
+}
+
+
+func reset_to_pattern_defaults() -> void:
+	var src := load(PRESET_DIR + PATTERN_PRESETS[pattern] + ".tres") as TerrainPathStyle
+	if src == null:
+		return
+	for p in get_property_list():
+		if p.usage & PROPERTY_USAGE_SCRIPT_VARIABLE and p.usage & PROPERTY_USAGE_STORAGE:
+			set(p.name, src.get(p.name))
+	notify_property_list_changed()
 
 
 ## fresh deep copy each call, the path owns it

@@ -1,0 +1,11 @@
+[gd_resource type="Terrain3DAssets" format=3 uid="uid://caqe3s6ltt6ab"]
+
+[ext_resource type="Texture2D" uid="uid://b7aqnlahun1xd" path="res://example/grass.png" id="1_hbrpo"]
+
+[sub_resource type="Terrain3DTextureAsset" id="Terrain3DTextureAsset_xnqtp"]
+name = "Grass"
+albedo_texture = ExtResource("1_hbrpo")
+uv_scale = 0.2
+
+[resource]
+texture_list = Array[Terrain3DTextureAsset]([SubResource("Terrain3DTextureAsset_xnqtp")])
